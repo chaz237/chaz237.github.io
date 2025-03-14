@@ -65,32 +65,69 @@
 			/////////////////// YOUR CODE BELOW HERE /////////////////////////
 			//////////////////////////////////////////////////////////////////
 
-			// TODO 2 - Variable declarations 
-            var exampleVariable = 5;
-
-
-			/* 
-			This Function will be called 20 times/second. Each time it is called,
-			it should move the Box to a new location. If the box drifts off the screen
-			turn it around! 
-			*/
+	
+           function getRandomColor() {
+			var r = Math.floor(Math.random() * 256);
+			var g = Math.floor(Math.random() * 256);
+			var b = Math.floor(Math.random() * 256);
+			return "rgb(" + r +"," + g + "," + b + ")";
+		   }
+			
 			function update() {
+				positionX += speed;
+				positionY += speedY;
+                
+			
+		     	moveBoxTo(positionX, positionY)
+                // Horizontal boundaary check  
+				if (positionX >= boardWidth - 70 || positionX <= 0) {
+					speed *= -1 // Reverse horizontal speed
+					points++; // Increase points when bouncing off walls
+					changeBoxText(points);
+				}
+               
+
+				if (positionY >= boardheight - 70 || positionY <= 0) {
+					speedY *= -1; // Reverse vertical speed
+				}
 
 
-			};
 
-			/* 
-			This Function will be called each time the box is clicked. Each time it is called,
-			it should increase the points total, increase the speed, and move the box to
-			the left side of the screen.
-			*/
-			function handleBoxClick() {
+			}
+   
+             function handleBoxClick() {
+                if (evemt.target !== box [0]) {
+					misClicks++;
+					if (misClicks >= 10){ 
+						endGame();
+						alert("Game Over! Too many mis-clicks.");
+					}
+				}
+			
+			     positionX = Math.random() * (boardWidth - 70);
+			     positionY = Math.random() * (bpardHeight- 70);
+
+				 points++;
 
 
-			};
+				 if (points % 3 === 0) {
+					speed+= 5;
+				 }
 
 
+				 speed = 3 * points + 10;
 
+				 var newColor = getRandomColor();
+				 box.css("background color", newColor);
+			
+				changeBoxText(points);
+			} 
+		
+			function endGame() {
+				clearInterval(interval);
+			}
+			    
+			box.on('click', handleBoxClick);
 
 
 		})();
